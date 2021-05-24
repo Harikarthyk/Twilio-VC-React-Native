@@ -53,7 +53,7 @@ export default class Example extends Component {
     status: 'disconnected',
     participants: new Map(),
     videoTracks: new Map(),
-    roomName: 'firstRoom',
+    roomName: '',
     user: '',
     token:
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzk2YzY0ZTAwMGNhYjQxOWE0ODExMjcxNmVjYTI4Mzg4LTE2MjE4NDE0NjkiLCJncmFudHMiOnsiaWRlbnRpdHkiOiIxMjM0NiIsInZpZGVvIjp7InJvb20iOiJmaXJzdFJvb20ifX0sImlhdCI6MTYyMTg0MTQ2OSwiZXhwIjoxNjIxODQ1MDY5LCJpc3MiOiJTSzk2YzY0ZTAwMGNhYjQxOWE0ODExMjcxNmVjYTI4Mzg4Iiwic3ViIjoiQUM4Yzk4YjY4YTVmNTQ3ZDNlOGM5NzFiZmQwZGYyOTNkZSJ9.ZuuCvYW4fqeFrn_6_dQvDiMoL-66-RYLtlPN6yFOW5Y',
