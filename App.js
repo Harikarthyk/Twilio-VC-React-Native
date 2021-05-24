@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   TouchableHighlight,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {
   TwilioVideoLocalView, // to get local view
@@ -41,7 +43,7 @@ export async function GetAllPermissions() {
   return null;
 }
 
-const API = `http://f3c548f82ecb.ngrok.io/api`;
+const API = `https://twilio-vc-server.herokuapp.com/api`;
 
 export default class Example extends Component {
   state = {
@@ -55,6 +57,7 @@ export default class Example extends Component {
     user: '',
     token:
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzk2YzY0ZTAwMGNhYjQxOWE0ODExMjcxNmVjYTI4Mzg4LTE2MjE4NDE0NjkiLCJncmFudHMiOnsiaWRlbnRpdHkiOiIxMjM0NiIsInZpZGVvIjp7InJvb20iOiJmaXJzdFJvb20ifX0sImlhdCI6MTYyMTg0MTQ2OSwiZXhwIjoxNjIxODQ1MDY5LCJpc3MiOiJTSzk2YzY0ZTAwMGNhYjQxOWE0ODExMjcxNmVjYTI4Mzg4Iiwic3ViIjoiQUM4Yzk4YjY4YTVmNTQ3ZDNlOGM5NzFiZmQwZGYyOTNkZSJ9.ZuuCvYW4fqeFrn_6_dQvDiMoL-66-RYLtlPN6yFOW5Y',
+    loader: false,
   };
   getTokenFromServer = () => {
     return axios
@@ -69,6 +72,13 @@ export default class Example extends Component {
     GetAllPermissions();
   }
   _onConnectButtonPress = () => {
+    let name = this.state.user.trim();
+    // console.log(this.state.user.length);
+    if (name.length <= 3) {
+      Alert.alert('Error', 'User name must be atleast 3 char');
+      return;
+    }
+    this.setState({...this.state, loader: true});
     console.log('in on connect button preess');
     this.getTokenFromServer()
       .then(response => {
@@ -76,6 +86,8 @@ export default class Example extends Component {
           roomName: this.state.roomName,
           accessToken: response.token,
         });
+
+        this.setState({...this.state, loader: false});
         this.setState({status: 'connecting'});
         console.log(this.state.status);
       })
@@ -137,9 +149,9 @@ export default class Example extends Component {
       <View style={styles.container}>
         {this.state.status === 'disconnected' && (
           <View>
-            <Text style={styles.welcome}>React Native Twilio Video</Text>
+            <Text style={styles.welcome}>Twilio VC 😊😃</Text>
             <View style={styles.spacing}>
-              <Text style={styles.inputLabel}>Room Name</Text>
+              <Text style={styles.inputLabel}>User Name</Text>
               <TextInput
                 style={styles.inputBox}
                 placeholder="User Name / user Id"
@@ -166,11 +178,21 @@ export default class Example extends Component {
                 onChangeText={text => this.setState({token: text})}
               />
             </View> */}
-            <TouchableHighlight
-              style={[styles.buttonContainer, styles.loginButton]}
-              onPress={this._onConnectButtonPress}>
-              <Text style={styles.Buttontext}>Connect</Text>
-            </TouchableHighlight>
+            {this.state.loader ? (
+              <TouchableHighlight
+                style={[styles.buttonContainer, styles.loginButton]}
+                onPress={() => {}}>
+                <Text style={styles.Buttontext}>
+                  <ActivityIndicator color="white" />
+                </Text>
+              </TouchableHighlight>
+            ) : (
+              <TouchableHighlight
+                style={[styles.buttonContainer, styles.loginButton]}
+                onPress={this._onConnectButtonPress}>
+                <Text style={styles.Buttontext}>Connect</Text>
+              </TouchableHighlight>
+            )}
           </View>
         )}
         {(this.state.status === 'connected' ||
@@ -293,6 +315,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    // alignItems: 'center',
+    justifyContent: 'center',
   },
   callContainer: {
     flex: 1,
@@ -304,9 +328,9 @@ const styles = StyleSheet.create({
     minHeight: '100%',
   },
   welcome: {
-    fontSize: 30,
+    fontSize: 27,
     textAlign: 'center',
-    paddingTop: 40,
+    paddingTop: '4%',
   },
   input: {
     height: 50,
