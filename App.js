@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   View,
-  Button,
   TouchableOpacity,
   PermissionsAndroid,
   TouchableHighlight,
@@ -16,8 +15,9 @@ import {
   TwilioVideoParticipantView, //to get participant view
   TwilioVideo,
 } from 'react-native-twilio-video-webrtc';
+// NOTE :
 // make sure you install vector icons and its dependencies
-
+//
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import normalize from 'react-native-normalize';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -43,7 +43,7 @@ export async function GetAllPermissions() {
   return null;
 }
 
-const API = `https://twilio-vc-server.herokuapp.com/api`;
+const API = `https://video-service-api.herokuapp.com/api`;
 
 export default class Example extends Component {
   state = {
@@ -60,8 +60,12 @@ export default class Example extends Component {
     loader: false,
   };
   getTokenFromServer = () => {
+    //userId / userName but must be unique
+    let userName = `${this.state.user} + ${new Date().getTime()} + ${Math.floor(
+      Math.random() * 10,
+    )}`;
     return axios
-      .post(`${API}/token/${this.state.user}`, {
+      .post(`${API}/token/${userName}`, {
         roomName: this.state.roomName,
       })
       .then(response => response.data)
@@ -73,7 +77,6 @@ export default class Example extends Component {
   }
   _onConnectButtonPress = () => {
     let name = this.state.user.trim();
-    // console.log(this.state.user.length);
     if (name.length <= 3) {
       Alert.alert('Error', 'User name must be atleast 3 char');
       return;
@@ -109,12 +112,10 @@ export default class Example extends Component {
   _onRoomDidConnect = () => {
     console.log('room did connected');
     this.setState({status: 'connected'});
-    // console.log("over");
   };
   _onRoomDidDisconnect = ({roomName, error}) => {
     console.log('ERROR: ', JSON.stringify(error));
     console.log('disconnected');
-
     this.setState({status: 'disconnected'});
   };
   _onRoomDidFailToConnect = error => {
@@ -149,7 +150,7 @@ export default class Example extends Component {
       <View style={styles.container}>
         {this.state.status === 'disconnected' && (
           <View>
-            <Text style={styles.welcome}>Twilio VC 😊😃</Text>
+            <Text style={styles.welcome}>Welcome to Quick VC 😊😃</Text>
             <View style={styles.spacing}>
               <Text style={styles.inputLabel}>User Name</Text>
               <TextInput
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
     minHeight: '100%',
   },
   welcome: {
-    fontSize: 27,
+    fontSize: 23,
     textAlign: 'center',
     paddingTop: '4%',
   },
