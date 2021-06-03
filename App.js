@@ -43,7 +43,7 @@ export async function GetAllPermissions() {
   return null;
 }
 
-const API = `https://video-service-api.herokuapp.com/api`;
+const API = `https://twilio-vc-server.herokuapp.com/api`;
 
 export default class Example extends Component {
   state = {
@@ -55,8 +55,7 @@ export default class Example extends Component {
     videoTracks: new Map(),
     roomName: '',
     user: '',
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzk2YzY0ZTAwMGNhYjQxOWE0ODExMjcxNmVjYTI4Mzg4LTE2MjE4NDE0NjkiLCJncmFudHMiOnsiaWRlbnRpdHkiOiIxMjM0NiIsInZpZGVvIjp7InJvb20iOiJmaXJzdFJvb20ifX0sImlhdCI6MTYyMTg0MTQ2OSwiZXhwIjoxNjIxODQ1MDY5LCJpc3MiOiJTSzk2YzY0ZTAwMGNhYjQxOWE0ODExMjcxNmVjYTI4Mzg4Iiwic3ViIjoiQUM4Yzk4YjY4YTVmNTQ3ZDNlOGM5NzFiZmQwZGYyOTNkZSJ9.ZuuCvYW4fqeFrn_6_dQvDiMoL-66-RYLtlPN6yFOW5Y',
+    token: '',
     loader: false,
   };
   getTokenFromServer = () => {
@@ -199,6 +198,39 @@ export default class Example extends Component {
         {(this.state.status === 'connected' ||
           this.state.status === 'connecting') && (
           <View style={styles.callContainer}>
+            {this.state.status === 'connecting' ? (
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                Connecting ...
+              </Text>
+            ) : this.state.videoTracks.size === 0 ? (
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                Ringing ...{' '}
+              </Text>
+            ) : (
+              <></>
+            )}
             {this.state.status === 'connected' && (
               <View style={styles.remoteGrid}>
                 <TouchableOpacity
@@ -327,6 +359,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     minHeight: '100%',
+    backgroundColor: '#000',
   },
   welcome: {
     fontSize: 23,
